@@ -4,12 +4,15 @@ import DefaultColumn from './Components/Containers/DefaultColumn';
 import DefaultRow from './Components/Containers/DefaultRow';
 import DefaultText from './Components/Texts/DefaultText';
 import Panel from './Components/Containers/Panel';
-import FixedAspectContainer from './Components/Containers/FixedAspectContainer.js';
+import FixedAspectContainer from './Components/Containers/FixedAspect.js';
+import Colors from './Styles/Colors';
 
 const AppContainer = styled(DefaultRow)`
   position: fixed;
   width: 100vw;
   height: 100vh;
+  justify-content: center;
+  background-color: ${Colors.Black};
 `;
 
 export default () => (
