@@ -33,6 +33,7 @@ export default class FixedAspect extends React.Component {
                 {...this.state.dimensions}
                 ratio={this.state.ratio}
                 ref={e => (this.container = e)}
+                className={this.props.className}
             >
                 {this.state.dimensions && this.props.children}
             </Container>

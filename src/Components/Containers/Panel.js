@@ -1,7 +1,8 @@
 import DefaultColumn from './DefaultColumn';
 import styled from 'styled-components';
-import Colors from '../../Styles/Colors';
+import Borders from '../../Styles/Borders';
 
 export default styled(DefaultColumn)`
-    border: 2px solid ${Colors.Cyan};
+    border: ${Borders.DefaultPanelBorder};
+    padding: 4px 6px;
 `;
