@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import DefaultRow from './Components/Containers/DefaultRow';
 import Colors from './Styles/Colors';
-import Game from './Components/Smart/Game';
+import Game from './Components/HighLevel/Game';
 
 const AppContainer = styled(DefaultRow)`
   position: fixed;
