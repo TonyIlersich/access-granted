@@ -1,7 +1,7 @@
 import React from 'react';
 import Colors from "../../Styles/Colors";
 import styled from "styled-components";
-import SvgText from '../Svg/SvgText';
+import SvgText from '../Svg/KeyboardText';
 import Margins from '../../Styles/Margins';
 import DefaultRow from '../Containers/DefaultRow';
 

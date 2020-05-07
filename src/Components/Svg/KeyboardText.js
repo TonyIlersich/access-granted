@@ -13,7 +13,7 @@ const Text = styled.text`
     font-size: .8px;
 `;
 
-export default ({className, children, width}) => (
+export default ({ className, children, width }) => (
     <Svg viewBox={`0 0 ${width || 1} 1`} className={className}>
         <Text textAnchor='middle' x={(width || 1) / 2} y={.8}>{children}</Text>
     </Svg>
