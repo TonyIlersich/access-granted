@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import DefaultRow from './DefaultRow';
 
 const Container = styled(DefaultRow)`
-    width: ${props => props.width && props.height ? `${Math.min(props.width, props.height * props.ratio)}px`: '100%'};
-    height: ${props => props.width && props.height ? `${Math.min(props.height, props.width / props.ratio)}px`: '100%'};
+    width: ${props => props.width && props.height ? `${Math.min(props.width, props.height * props.ratio)}px` : '100%'};
+    height: ${props => props.width && props.height ? `${Math.min(props.height, props.width / props.ratio)}px` : '100%'};
     flex-grow: 0;
 `;
 
@@ -22,11 +22,11 @@ export default class FixedAspect extends React.Component {
     componentDidUpdate() {
         this._maybeResize();
     }
-    
+
     componentWillUnmount() {
         window.removeEventListener('resize', this._onWindowResize);
     }
-  
+
     render() {
         return (
             <Container
@@ -43,13 +43,11 @@ export default class FixedAspect extends React.Component {
     _onWindowResize = () => this.setState({ dimensions: null });
 
     _maybeResize = () => {
-        console.log('resize?');
         const dimensions = {
             width: this.container.offsetWidth,
             height: this.container.offsetHeight,
         };
         if (!this.state.dimensions) {
-            console.log('yes');
             this.setState({ dimensions });
         }
     }
