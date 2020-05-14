@@ -6,7 +6,7 @@ export default ({ color, fill, x, y, width, height, onClick }) => (
     <rect x="76" y="32" width="104" height="192" rx="28" stroke={color} strokeWidth="8" />
     <line x1="72" y1="192" x2="184" y2="192" stroke={color} strokeWidth="6" />
     <line x1="72" y1="61" x2="184" y2="61" stroke={color} strokeWidth="6" />
-    <line x1="116" y1="48" x2="141" y2="48" stroke={color} strokeWidth="6" stroke-linecap="round" stroke-linejoin="round" />
+    <line x1="116" y1="48" x2="141" y2="48" stroke={color} strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
     <circle cx="128" cy="128" r="124" stroke={color} strokeWidth="8" />
     <circle cx="128" cy="128" r="124" fill={fill || 'transparent'} />
   </svg>
