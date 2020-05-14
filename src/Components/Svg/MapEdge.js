@@ -23,8 +23,9 @@ export default ({ scale, nodeRadius, edge, node1, node2 }) => {
     x: v_1m.x / len_1m,
     y: v_1m.y / len_1m
   };
-  const x1 = node1.x + norm_1m.x * nodeRadius;
-  const y1 = node1.y + norm_1m.y * nodeRadius;
+  const step1m = node1.minigameInfo ? nodeRadius / Math.max(Math.max(Math.abs(norm_1m.x), Math.abs(norm_1m.y)), .8) : nodeRadius;
+  const x1 = node1.x + norm_1m.x * step1m;
+  const y1 = node1.y + norm_1m.y * step1m;
   const v_2m = {
     x: mid.x - node2.x,
     y: mid.y - node2.y
@@ -34,8 +35,9 @@ export default ({ scale, nodeRadius, edge, node1, node2 }) => {
     x: v_2m.x / len_2m,
     y: v_2m.y / len_2m
   };
-  const x2 = node2.x + norm_2m.x * nodeRadius;
-  const y2 = node2.y + norm_2m.y * nodeRadius;
+  const step2m = node2.minigameInfo ? nodeRadius / Math.max(Math.max(Math.abs(norm_2m.x), Math.abs(norm_2m.y)), .8) : nodeRadius;
+  const x2 = node2.x + norm_2m.x * step2m;
+  const y2 = node2.y + norm_2m.y * step2m;
   return (
     <polyline
       points={`${x1 * scale},${y1 * scale} ${len_1m < nodeRadius || len_2m < nodeRadius ? '' : `${mid.x * scale},${mid.y * scale}`} ${x2 * scale},${y2 * scale}`}
