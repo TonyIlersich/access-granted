@@ -1,5 +1,6 @@
 import React from 'react';
 import Colors from "../../Styles/Colors";
+import { NodeStates } from '../../Models/Map';
 
 // TODO: 'edge' will be used to determine the style for different types
 export default ({ scale, nodeRadius, edge, node1, node2 }) => {
@@ -41,7 +42,7 @@ export default ({ scale, nodeRadius, edge, node1, node2 }) => {
   return (
     <polyline
       points={`${x1 * scale},${y1 * scale} ${len_1m < nodeRadius || len_2m < nodeRadius ? '' : `${mid.x * scale},${mid.y * scale}`} ${x2 * scale},${y2 * scale}`}
-      stroke={Colors.DefaultStroke}
+      stroke={[node1.state, node2.state].every(s => [NodeStates.Infected, NodeStates.Neutral].includes(s)) ? Colors.InfectedNode : Colors.DefaultStroke}
       fill={Colors.DefaultFill}
       strokeWidth={3}
     />
