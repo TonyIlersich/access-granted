@@ -1,3 +1,5 @@
+import { Minigame, MinigameTypes } from "./Minigame";
+
 export const NodeTypes = {
   CellPhone: 'CellPhone',
   CoffeeShop: 'Coffee Shop',
@@ -37,14 +39,20 @@ const MapTypes = {
 export class Map {
   _nodes = [];
   _edges = [];
-  _makeNode(type, label, isExposed, desc, minigameInfo = null, state = NodeStates.Online) {
+  _makeNode(type, label, isExposed, desc, ram, minigameInfo = null, state = NodeStates.Online) {
     const id = this._nodes.length;
-    this._nodes.push({ id, type, label, isExposed, desc, state, x: 0, y: 0, minigameInfo, subMap: null });
+    this._nodes.push({ id, type, label, isExposed, desc, ram: ram, state, x: 0, y: 0, minigameInfo, subMap: null, data: 0 });
     return id;
   }
   _moveNode(id, x, y) {
     this._nodes[id].x = x;
     this._nodes[id].y = y;
+  }
+  _setNodeData(id, data) {
+    this._nodes[id].data = data;
+  }
+  _getTotalData(id) {
+    return this._nodes.reduce((p, n) => p + n.data + (n.subMap ? n.subMap._getTotalData() : 0), 0);
   }
   _makeEdge(type, id1, id2) {
     this._edges.push({ id: this._edges.length, type, id1, id2 });
@@ -57,6 +65,7 @@ export class Map {
       isFirst
         ? `This particular shop is your base of operations. Connected to this network is your laptop, from which you are orchestrating this take-over.`
         : `Coffee shops have minimal security and free wi-fi. As such, they are an easy way to hijack common mobile devices.`,
+      0,
     );
     this._nodes[id].subMap = new Map(MapTypes.CoffeeShop, this._nodes[id], isFirst);
     if (isFirst) {
@@ -71,18 +80,19 @@ export class Map {
       false,
       `Tezmazon's offices are secure. Firewalls, anti-virus software, cutting-edge encryption. The more sensitive their data, the tighter the `
       + `security will be, but it's nothing you can't handle. Every system has vulnerabilities, and you will find them.`,
+      0,
     );
     this._nodes[id].subMap = new Map(MapTypes.Office, this._nodes[id]);
     return id;
   }
-  _makeRouter() {
+  _makeRouter(difficulty = 0) {
     return this._makeNode(
       NodeTypes.Router,
       'Router',
       true,
-      `A router receives messages from the internet and routes them to devices on the local network. They can be tricky to infect, and you may have `
-      + `to fight to keep them. They are usually a primary target for counter-hacking.`,
-      {}, // TODO: put useful data here
+      `A router receives messages from the internet and routes them to devices on the local network.`,
+      2,
+      new Minigame(MinigameTypes.Maze, { width: 17 + 3 * difficulty, height: 7 + 2 * difficulty }),
     )
   }
   _makeCellPhone() {
@@ -90,7 +100,8 @@ export class Map {
       NodeTypes.CellPhone,
       'Cell Phone',
       false,
-      `Cell phones can be useful to gain hacking resources, but they will be limited. They are easily infected if you've already taken the router.`
+      `Cell phones can be useful to gain hacking resources, but they will be limited. They are easily infected if you've already taken the router.`,
+      4,
     )
   }
   _makeInternet() {
@@ -101,6 +112,7 @@ export class Map {
       `Once a great open community where people accross the globe could exchange ideas. It is now little more than a weapon of the greedy elite. `
       + `Mass surveillance, targeted advertising, misinformation campaigns, propagation of hate speech, I could go on, but you know this as well as `
       + `I do. We will be its liberators.`,
+      0,
       null,
       NodeStates.Neutral
     );
@@ -110,12 +122,36 @@ export class Map {
       NodeTypes.Laptop,
       'Your Laptop',
       false,
-      `All your orders come from this laptop. If infected devices are cut off from this laptop, you will lose control, but they will stay infected `
-      + `until they are counter-hacked. If you haven't already, your first step should be to attack the router in this coffee shop. This will give `
-      + `you an internet connection, and it will expose the other devices on this network for you to exploit.`,
+      `All your orders come from this laptop. If you haven't already, your first step should be to infect the router in this coffee shop. This will `
+      + `give you an internet connection, and it will expose the other devices on this network for you to infect.`,
+      16,
       null,
       NodeStates.Infected
     );
+  }
+  _makeServer() {
+    return this._makeNode(
+      NodeTypes.Server,
+      'Server',
+      false,
+      `Servers are the heavy lifters. They get a lot done, and talk to a lot of other devices. If they are compromised, connected databases become `
+      + `vulnerable`,
+      32,
+      new Minigame(MinigameTypes.Blocks),
+    );
+  }
+  _makeDatabase() {
+    const id = this._makeNode(
+      NodeTypes.Database,
+      'Database',
+      false,
+      `Databases are where Tezmazon keeps their data. Some databases contain more data than others. We will need at least 50% of all data under our `
+      + `control for this to work. Once we have enough, I'll wipe it remotely, and your job will be done.`,
+      8,
+      new Minigame(MinigameTypes.Hash),
+    );
+    this._setNodeData(id, 2 ** Math.floor(Math.random() * 3 + 1)) // in TB
+    return id;
   }
   constructor(type, owner, isFirst = false) {
     this._owner = owner || null;
@@ -123,7 +159,6 @@ export class Map {
       case MapTypes.Global: {
         const numCoffeeShops = 5;
         const numOffices = 5;
-        // TODO: give desc
         const internetId = this._makeInternet();
         const siteIds = [];
         for (let i = 0; i < numOffices; i++) {
@@ -166,8 +201,27 @@ export class Map {
         }
         return;
       } case MapTypes.Office: {
-        const routerId = this._makeRouter();
-        // TODO: implement this
+        const routerId = this._makeRouter(1);
+        const numServers = 2 + Math.floor(Math.random() * 3) * 2;
+        for (let i = 0; i < numServers; i++) {
+          const serverId = this._makeServer();
+          this._makeEdge(EdgeTypes.Vulnerability, routerId, serverId);
+          const theta = (i + (numServers === 4 ? .5 : 0)) / numServers * 2 * Math.PI;
+          const serverX = Math.cos(theta) * 1.1;
+          const serverY = Math.sin(theta) * .5;
+          this._moveNode(serverId, serverX, serverY);
+          const ids =
+            new Array(Math.floor(Math.pow(Math.random(), 2) * 2.5 + 1))
+              .fill('')
+              .map(() => this._makeDatabase());
+          ids.forEach((id, idx) => {
+            this._makeEdge(EdgeTypes.Vulnerability, serverId, id);
+            const omega = ids.length > 1
+              ? theta + (idx / (ids.length - 1) - .5) / numServers * 2 * Math.PI
+              : theta;
+            this._moveNode(id, serverX + Math.cos(omega) * .8, serverY + Math.sin(omega) * .4);
+          });
+        }
         return;
       } default: {
         console.error(`INVALID MAP TYPE: '${type}'`);
@@ -184,14 +238,14 @@ export class Map {
   _shutdownNode(id) {
     const node = this._nodes[id];
     node.state = NodeStates.Offline;
-    if (!this.isExposed()) {
+    if (!this.hasExposedInfectedNodes()) {
       this._owner.state = NodeStates.Online;
     }
   }
   _cleanNode(id) {
     const node = this._nodes[id];
     node.state = NodeStates.Online;
-    if (!this.isExposed()) {
+    if (!this.hasExposedInfectedNodes()) {
       this._owner.state = NodeStates.Online;
     }
   }
@@ -212,10 +266,21 @@ export class Map {
     }).filter(n => n !== null);
     return adjacentInfected;
   }
-  isExposed() {
+  hasExposedInfectedNodes() {
     return this._nodes.some(n => n.isExposed && n.state === NodeStates.Infected)
   }
-  canInfect(id) {
-    return (this.isExposed() || this._nodes.some(n => n.type === NodeTypes.Laptop)) && this._getAdjacentInfected(id).length > 0;
+  canInfect(id, isOutsideInfected) {
+    return (
+      (this._nodes[id].isExposed && isOutsideInfected) ||
+      ((this.hasExposedInfectedNodes() || this._nodes.some(n => n.type === NodeTypes.Laptop)) && this._getAdjacentInfected(id).length > 0)
+    );
+  }
+  getInfectedRam() {
+    return this._nodes.reduce((p, n) =>
+      p +
+      (n.state === NodeStates.Infected ? n.ram : 0) +
+      (n.subMap ? n.subMap.getInfectedRam() : 0),
+      0
+    );
   }
 }

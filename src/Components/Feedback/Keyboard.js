@@ -2,8 +2,6 @@ import React from 'react';
 import KeyRow from "./KeyRow";
 import Key from "./Key";
 
-// TODO: hook up colors
-
 export default () => (
   <>
     <KeyRow>

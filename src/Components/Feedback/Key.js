@@ -32,7 +32,7 @@ export default class Key extends React.Component {
     document.addEventListener('keyup', this._onKeyRelease);
   }
 
-  componentWillMount() {
+  componentWillUnmount() {
     document.removeEventListener('keydown', this._onKeyPress);
     document.removeEventListener('keyup', this._onKeyRelease);
   }

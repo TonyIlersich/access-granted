@@ -2,7 +2,6 @@ import React from 'react';
 import Colors from "../../Styles/Colors";
 import { NodeStates } from '../../Models/Map';
 
-// TODO: 'edge' will be used to determine the style for different types
 export default ({ scale, nodeRadius, edge, node1, node2 }) => {
   const v_12 = { x: node2.x - node1.x, y: node2.y - node1.y };
   const len_12 = Math.sqrt(v_12.x * v_12.x + v_12.y * v_12.y);
@@ -24,7 +23,7 @@ export default ({ scale, nodeRadius, edge, node1, node2 }) => {
     x: v_1m.x / len_1m,
     y: v_1m.y / len_1m
   };
-  const step1m = node1.minigameInfo ? nodeRadius / Math.max(Math.max(Math.abs(norm_1m.x), Math.abs(norm_1m.y)), .8) : nodeRadius;
+  const step1m = node1.minigameInfo ? nodeRadius / Math.max(Math.abs(norm_1m.x), Math.abs(norm_1m.y), .8) : nodeRadius;
   const x1 = node1.x + norm_1m.x * step1m;
   const y1 = node1.y + norm_1m.y * step1m;
   const v_2m = {
@@ -36,7 +35,7 @@ export default ({ scale, nodeRadius, edge, node1, node2 }) => {
     x: v_2m.x / len_2m,
     y: v_2m.y / len_2m
   };
-  const step2m = node2.minigameInfo ? nodeRadius / Math.max(Math.max(Math.abs(norm_2m.x), Math.abs(norm_2m.y)), .8) : nodeRadius;
+  const step2m = node2.minigameInfo ? nodeRadius / Math.max(Math.abs(norm_2m.x), Math.abs(norm_2m.y), .8) : nodeRadius;
   const x2 = node2.x + norm_2m.x * step2m;
   const y2 = node2.y + norm_2m.y * step2m;
   return (
