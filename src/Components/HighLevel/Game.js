@@ -180,8 +180,8 @@ export default class Game extends React.Component {
     this.setState({
       selectedNode: null,
       inspectorOverride: {
-        title: `${this.state.targetNode.type} Infected!`,
-        body: `The ${this.state.targetNode.type} is now under your control. You gained ${this.state.targetNode.ram} GB of RAM.`,
+        title: `${this.state.selectedNode.type} Infected!`,
+        body: `The ${this.state.selectedNode.type} is now under your control. You gained ${this.state.selectedNode.ram} GB of RAM.`,
       },
     });
   }

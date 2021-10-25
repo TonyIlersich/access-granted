@@ -11,7 +11,7 @@ export class Minigame {
       case MinigameTypes.Maze: {
         this.title = 'Cyber-Attack: Router';
         this.desc = `The red node is your virus. Hack your way through to the white node.`;
-        this.keys = '`1234567890-=qwertyuiop[]\\asdfghjkl;\'zxcvbnm,./'.split('');
+        this.keys = '1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.'.split('');
         this.timeLimit = props.timeLimit || 119;
         this.width = props.width || 15;
         this.height = props.height || 6;
@@ -70,7 +70,7 @@ export class Minigame {
       case MinigameTypes.Blocks: {
         this.title = 'Cyber-Attack: Server';
         this.desc = 'The red node is your virus. Infect all the blue nodes without touching the anti-virus blocks.';
-        this.keys = '`1234567890-=qwertyuiop[]\\asdfghjkl;\'zxcvbnm,./'.split('').sort(() => Math.random() - .5);
+        this.keys = '1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.'.split('').sort(() => Math.random() - .5);
         this.width = props.width || 12;
         this.height = props.height || 8;
         this.hKeys = this.keys.slice(0, this.width);
@@ -99,7 +99,7 @@ export class Minigame {
         this.title = 'Cyber-Attack: Database';
         this.desc = `We need the password to unlock the database. If you figure out half the characters, we can brute force our way in. Type your `
           + `guesses and press enter to guess. Characters guessed correctly will appear red. Characters in the wrong place will appear white.`;
-        this.keys = '`1234567890-=qwertyuiop[]\\asdfghjkl;\'zxcvbnm,./'.split('').sort(() => Math.random() - .5);
+        this.keys = '1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.'.split('').sort(() => Math.random() - .5);
         this.hash = this.keys.slice(0, props.hashLength || 10);
         this.timeLimit = props.timeLimit || 4 * 60 - 1;
         break;

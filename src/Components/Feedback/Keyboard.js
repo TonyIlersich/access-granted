@@ -5,22 +5,25 @@ import Key from "./Key";
 export default () => (
   <>
     <KeyRow>
-      {'`1234567890-='.split('').map(label => <Key key={label} label={label} />)}
+      <Key />
+      {'1234567890-='.split('').map(label => <Key key={label} label={label} />)}
       <Key width={2.2} />
     </KeyRow>
     <KeyRow>
       <Key width={1.6} />
       {'QWERTYUIOP[]'.split('').map(label => <Key key={label} label={label} />)}
-      <Key label='\' width={1.6} />
+      <Key width={1.6} />
     </KeyRow>
     <KeyRow>
       <Key width={2} />
-      {'ASDFGHJKL;\''.split('').map(label => <Key key={label} label={label} />)}
+      {'ASDFGHJKL;'.split('').map(label => <Key key={label} label={label} />)}
+      <Key />
       <Key label='Enter' width={2.5} />
     </KeyRow>
     <KeyRow>
       <Key width={3} />
-      {'ZXCVBNM,./'.split('').map(label => <Key key={label} label={label} />)}
+      {'ZXCVBNM,.'.split('').map(label => <Key key={label} label={label} />)}
+      <Key />
       <Key width={3} />
     </KeyRow>
     <KeyRow>
